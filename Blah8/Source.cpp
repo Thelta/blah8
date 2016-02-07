@@ -72,7 +72,7 @@ Stack *stackInit();
 unsigned short stackPop(Stack *st);
 void stackPush(Stack *st, unsigned short v);
 
-void loadGame();
+void loadGame(char* path);
 void emulateCycle(Stack *st);
 
 int initScreen();
@@ -88,7 +88,7 @@ int main(int argc, char* args[])
 	for (int i = 0; i < 80; ++i)
 		memory[i] = chip8_fontset[i];
 
-	loadGame();
+	loadGame(args[1]);
 
 	srand(time(NULL));
 
@@ -194,12 +194,15 @@ void stackPush(Stack *st, unsigned short v)
 		st->stack[(st->sp)++] = v;
 }
 
-void loadGame()
+void loadGame(char* path)
 {
-	FILE *fl = fopen("game.c8", "rb");
+	FILE *fl = fopen(path, "rb");
 	int i;
 	if (fl == NULL)
-		printf("uuuuuuuuuuuck");
+	{
+		printf("Game couldn't loaded");
+		exit(0);
+	}
 
 	fseek(fl, 0, SEEK_END);
 	long bufferSize = ftell(fl);
