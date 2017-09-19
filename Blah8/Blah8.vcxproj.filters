@@ -21,9 +21,15 @@
     <ClCompile Include="DataStruct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="chip8.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chip8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
