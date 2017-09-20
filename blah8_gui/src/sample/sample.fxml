@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="45.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="336.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="41.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="186.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="267.0" minHeight="10.0" prefHeight="231.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <Button layoutX="209.0" layoutY="20.0" mnemonicParsing="false" text="Start Emulator" fx:id="runEmulatorButton" />
+         </children>
+      </AnchorPane>
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="122.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="195.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="22.0" text="Game Path" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <TextField layoutX="14.0" layoutY="18.0" prefHeight="25.0" prefWidth="129.0" fx:id="filePathField" />
+                  <Button layoutX="155.0" layoutY="18.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="..." fx:id="filePickButton" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <ChoiceBox layoutX="14.0" layoutY="14.0" prefWidth="150.0" fx:id="resolutionBox" />
+                  <CheckBox layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Fullscreen" fx:id="fullscreenCheckBox" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <Label layoutX="14.0" layoutY="32.0" text="Screen Resolution" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Label layoutX="14.0" layoutY="20.0" text="Background Color" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <Label layoutX="14.0" layoutY="18.0" text="Object Color" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                   <ColorPicker layoutX="14.0" layoutY="19.0" fx:id="objectColorPicker">
+                       <value>
+                           <Color blue="0.5" green="0.5" red="0.5" />
+                       </value>
+                   </ColorPicker>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                   <ColorPicker layoutX="14.0" layoutY="19.0" fx:id="backgroundColorPicker" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+         <children>
+            <Label alignment="CENTER" layoutX="59.0" layoutY="5.0" prefHeight="61.0" prefWidth="200.0" text="blah8">
+               <font>
+                  <Font name="bitwise" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>
