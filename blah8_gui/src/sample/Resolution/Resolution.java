@@ -1,4 +1,4 @@
-package sample;
+package sample.Resolution;
 
 public class Resolution
 {

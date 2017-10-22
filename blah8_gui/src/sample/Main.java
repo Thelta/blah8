@@ -6,24 +6,61 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import sample.MainPage.MainPageController;
+
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main extends Application
 {
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        try
+        {
+            GlobalScreen.registerNativeHook();
+            LogManager.getLogManager().reset();
+            Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+            logger.setLevel(Level.OFF);
+        }
+        catch (NativeHookException ex)
+        {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(-1);
+        }
+
+
         Font.loadFont(getClass().getResource("bitwise.ttf").toExternalForm(), 25);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage/sample.fxml"));
         Parent root = loader.load();
-        Controller controller = loader.getController();
+        MainPageController controller = loader.getController();
         controller.setMain(this);
 
         primaryStage.setTitle("blah8 Launcher");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 330, 400));
+        primaryStage.setScene(new Scene(root, 380, 430));
         primaryStage.show();
     }
+
+    @Override
+    public void stop()
+    {
+        try
+        {
+            GlobalScreen.unregisterNativeHook();
+        }
+        catch (NativeHookException ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
 
     public static void main(String[] args) {

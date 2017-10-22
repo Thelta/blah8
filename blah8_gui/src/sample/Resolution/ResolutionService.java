@@ -1,7 +1,8 @@
-package sample;
+package sample.Resolution;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sample.Resolution.Resolution;
 
 import java.awt.*;
 import java.util.ArrayList;
