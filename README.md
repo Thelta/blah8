@@ -21,7 +21,7 @@ produce error sound. So far so good.
 
 I could talk a lot about input handling, but I will talk about that at launcher part.
 
-##Launcher
+## Launcher
 It is written in Java using JavaFX. The reason I used Java because It was universal and it had vast libraries. In Java Swing, you can cull resolutions
 so I didn't have to write platform specific code.
 
