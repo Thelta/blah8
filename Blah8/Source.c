@@ -1,16 +1,22 @@
 ﻿#include <SDL.h>
+#include <string.h>
 #include "chip8.h"
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 640
+#define CHIP8_WIDTH 64
+#define CHIP8_HEIGHT 32
 
-typedef enum  Keypad
+typedef struct Config
 {
-	KEY_1, KEY_2, KEY_3, KEY_4,
-	KEY_Q, KEY_W, KEY_E, KEY_R,
-	KEY_A, KEY_S, KEY_D, KEY_F,
-	KEY_Z, KEY_X, KEY_C, KEY_V
-}Keypad;
+	char gamePath[255];
+	int resWidth;
+	int resHeight;
+	int fullscreen;
+	uint8_t objectColor[3];	//0 R, 1 G, 2 B
+	uint8_t backgroundColor[3];
+	int keyCode[16];
+} Config;
+
+
 
 SDL_Window  *gWindow = NULL;
 SDL_Surface *gSurface = NULL;
@@ -20,20 +26,26 @@ int quit = 0;
 
 void loadGame(char* path);
 
-int initScreen();
-void pressedKeys(SDL_Event *e);
-void renderScreenNow();
+int initScreen(Config config);
+void pressedKeys(SDL_Event *e, int *scanCodes);
+void renderScreenNow(Config config);
+void splitRGB(uint8_t *configColor, uint32_t colorString);
+void splitKeycodes(int *keycodes, char *keyCodeString);
+Config readConfigFile();
+
 
 int main(int argc, char* args[]) 
 {
+	Config config = readConfigFile();
+
 	initChip8();
 
-	loadGame(args[1]);
+	loadGame(config.gamePath);
 
 	
 
 	//Start up SDL and create window
-	if (!initScreen())
+	if (!initScreen(config))
 	{
 		printf("Failed to initialize!\n");
 	}
@@ -45,10 +57,10 @@ int main(int argc, char* args[])
 		{
 			emulateCycle();
 
-			pressedKeys(&e);
+			pressedKeys(&e, config.keyCode);
 			if (drawFlag == 1)
 			{ 
-				renderScreenNow();
+				renderScreenNow(config);
 			}
 			drawFlag = 0;			
 		}
@@ -56,7 +68,8 @@ int main(int argc, char* args[])
 	return 0;
 }
 
-int initScreen()
+
+int initScreen(Config config)
 {
 	//Initialization flag
 	int success = 1;
@@ -77,7 +90,7 @@ int initScreen()
 
 		//Create window
 		gWindow = SDL_CreateWindow("Blah8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-									SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+									config.resWidth, config.resWidth / 2, SDL_WINDOW_SHOWN);
 
 		if (gWindow == NULL)
 		{
@@ -100,6 +113,8 @@ int initScreen()
 			}
 			else
 			{
+				//fullscreen
+				SDL_SetWindowFullscreen(gWindow, config.fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 				//Initialize renderer color
 				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 1);
 			}
@@ -109,7 +124,7 @@ int initScreen()
 	return success;
 }
 
-void pressedKeys(SDL_Event *e)
+void pressedKeys(SDL_Event *e, int *scanCodes)
 {
 	//Handle events on queue
 	while (SDL_PollEvent(e) != 0)
@@ -125,86 +140,13 @@ void pressedKeys(SDL_Event *e)
 			if (e->type == SDL_KEYDOWN)
 				changer = 1;
 
-			switch (e->key.keysym.sym)
+			e->key.keysym.sym;
+			int i = 0;
+			for (i = 0; i < 16; i++)
 			{
-				case SDLK_1:
+				if (e->key.keysym.scancode == scanCodes[i])
 				{
-					key[KEY_1] = changer;
-					break;
-				}
-				case SDLK_2:
-				{
-					key[KEY_2] = changer;
-					break;
-				}
-				case SDLK_3:
-				{
-					key[KEY_3] = changer;
-					break;
-				}
-				case SDLK_4:
-				{
-					key[KEY_4] = changer;
-					break;
-				}
-				case SDLK_q:
-				{
-					key[KEY_Q] = changer;
-					break;
-				}
-				case SDLK_w:
-				{
-					key[KEY_W] = changer;
-					break;
-				}
-				case SDLK_e:
-				{
-					key[KEY_E] = changer;
-					break;
-				}
-				case SDLK_r:
-				{
-					key[KEY_R] = changer;
-					break;
-				}
-				case SDLK_a:
-				{
-					key[KEY_A] = changer;
-					break;
-				}
-				case SDLK_s:
-				{
-					key[KEY_S] = changer;
-					break;
-				}
-				case SDLK_d:
-				{
-					key[KEY_D] = changer;
-					break;
-				}
-				case SDLK_f:
-				{
-					key[KEY_F] = changer;
-					break;
-				}
-				case SDLK_z:
-				{
-					key[KEY_Z] = changer;
-					break;
-				}
-				case SDLK_x:
-				{
-					key[KEY_X] = changer;
-					break;
-				}
-				case SDLK_c:
-				{
-					key[KEY_C] = changer;
-					break;
-				}
-				case SDLK_v:
-				{
-					key[KEY_V] = changer;
+					key[i] = changer;
 					break;
 				}
 			}
@@ -214,22 +156,98 @@ void pressedKeys(SDL_Event *e)
 	
 }
 
-void renderScreenNow()
+Config readConfigFile()
 {
-	int i, j;
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	Config config;
+
+	FILE *fl = fopen("options.config", "r");
+	if (fl == NULL)
+	{
+		printf("Config file couldn't load");
+		exit(0);
+	}
+
+	char keyCodeString[64];
+	uint32_t objectColorString = 0, backgroundColorString = 0;
+
+	fscanf(fl, "%s %d %d %d %x %x %s", config.gamePath,
+		   &(config.resWidth), &(config.resHeight), &(config.fullscreen),
+		   &objectColorString, &backgroundColorString,
+		   keyCodeString);
+
+	splitRGB(&(config.objectColor), objectColorString);
+	splitRGB(&(config.backgroundColor), backgroundColorString);
+	splitKeycodes(&(config.keyCode), keyCodeString);
+
+	return config;
+}
+
+void splitRGB(uint8_t *configColor, uint32_t colorString)
+{
+	int i;
+	for (i = 0; i < 3; i++)
+	{
+		configColor[i] = (colorString & (0xff000000 >> 8 * i)) >> (24 - 8 * i);
+	}
+}
+
+void splitKeycodes(int *keycodes, char *keyCodeString)
+{
+	int i;
+	char *oneKeyCodeString = strtok(keyCodeString,  ";");
+	for (i = 0; i < 16; i++)
+	{
+		keycodes[i] = atoi(oneKeyCodeString);
+		oneKeyCodeString = strtok(NULL, ";");
+	}
+}
+
+
+void renderScreenNow(Config config)
+{
+	int y, x;
+	SDL_SetRenderDrawColor(gRenderer, config.backgroundColor[0], config.backgroundColor[1], config.backgroundColor[2], 0xFF);
 	SDL_RenderClear(gRenderer);
 
-	for (i = 0; i < 32; i++)
+	for (y = 0; y < CHIP8_HEIGHT; y++)
 	{
-		for (j = 0; j < 64; j++)
+		for (x = 0; x < CHIP8_WIDTH;)
 		{
-			if (gfx[i][j] == 1)
+			if (gfx[y][x] == 1)
 			{
-				SDL_Rect fillRect = { j * 20, i * 20, 20, 20 };
-				SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, 0xFF); 
-				SDL_RenderFillRect(gRenderer, &fillRect);
+				int width, height;
+
+				for (width = 1; width + x < CHIP8_WIDTH && gfx[y][width + x] == 1; width++);
+				int done = 0;
+				for (height = 1; y + height < CHIP8_HEIGHT; height++)
+				{
+					int widthControlForHeight;
+					for (widthControlForHeight = 0; widthControlForHeight < width; widthControlForHeight++)
+					{
+						if (gfx[y + height][x + widthControlForHeight] == 0)
+						{
+							done = 1;
+							break;
+						}
+					}
+
+					if (done) { break; }
+				}
 				
+
+				int pixelSize = round(config.resWidth / 64.0f);
+				SDL_Rect fillRect = { x * pixelSize, y * pixelSize, pixelSize * width, pixelSize * height };
+				SDL_SetRenderDrawColor(gRenderer, 
+									   config.objectColor[0], config.objectColor[1], config.objectColor[2], 0xFF);
+				SDL_RenderFillRect(gRenderer, &fillRect);
+
+				x += width;
+
+				
+			}
+			else
+			{
+				x++;
 			}
 		}
 	}

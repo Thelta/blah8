@@ -47,6 +47,7 @@ void (*typef[])(uint16_t) = { iifx07, iifx15, somethingWrong, iifx0a, iifx18, if
 							  iifx29, somethingWrong, iifx1e, somethingWrong, somethingWrong, iifx55, somethingWrong,
 							  somethingWrong, iifx65 };
 
+
 void initChip8()
 {
 	st = stackInit();
@@ -63,8 +64,6 @@ void emulateCycle()
 {
 	opcode = memory[pc] << 8;
 	opcode = opcode | memory[pc + 1];
-
-	printf("%x\n", opcode);
 	
 	instructionIdentifier[(opcode & 0xf000) >> 12](opcode);
 
@@ -109,7 +108,7 @@ void loadGame(char* path)
 
 internal void somethingWrong(uint16_t opcode)
 {
-	printf("Something is wong");
+	printf("Something is wrong");
 	exit(-1);
 }
 

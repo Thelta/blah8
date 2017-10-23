@@ -78,7 +78,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="chip8.c" />
-    <ClCompile Include="ConfigReader.h" />
     <ClCompile Include="DataStruct.c" />
     <ClCompile Include="Source.c" />
   </ItemGroup>
