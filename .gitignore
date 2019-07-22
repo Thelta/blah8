@@ -154,3 +154,11 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+blah8_gui/\.idea/
+
+blah8_gui/libs/
+
+blah8_gui/target/
+
+blah8_gui/src/sample/

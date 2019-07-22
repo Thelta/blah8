@@ -1,4 +1,4 @@
-package sample.Resolution;
+package sample.sample.Resolution;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

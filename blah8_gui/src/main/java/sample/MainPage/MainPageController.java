@@ -13,7 +13,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 import sample.HexpadControls.HexpadButton;
 import sample.HexpadControls.HexpadControls;
-import sample.Main;
+import sample.App;
 import sample.Resolution.Resolution;
 import sample.Resolution.ResolutionService;
 
@@ -24,7 +24,7 @@ public class MainPageController implements NativeKeyListener
 {
 
     @FXML
-    private Main main;
+    private App main;
 
     @FXML
     private Button filePickButton;
@@ -59,7 +59,7 @@ public class MainPageController implements NativeKeyListener
 
     private static String EMULATOR_NAME = "blah8";
 
-    public void setMain(Main main)
+    public void setMain(App main)
     {
         this.main = main;
     }
