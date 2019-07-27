@@ -1,6 +1,11 @@
-﻿#include <SDL.h>
-#include <string.h>
+﻿#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "chip8.h"
+
+#include <SDL.h>
+#include <string.h>
 
 #define CHIP8_WIDTH 64
 #define CHIP8_HEIGHT 32

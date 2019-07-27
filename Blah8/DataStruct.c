@@ -1,10 +1,12 @@
-#include "DataStruct.h"
+#include "datastruct.h"
+
+#include <stdlib.h>
+#include <stdio.h>
 
 Stack* stackInit()
 {
 	Stack *st;
 	st = (Stack*)malloc(sizeof(Stack));
-
 	st->sp = 0;
 
 	return st;
