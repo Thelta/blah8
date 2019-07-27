@@ -1,4 +1,4 @@
-package sample.sample.HexpadControls;
+package sample.HexpadControls;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
