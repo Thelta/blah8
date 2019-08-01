@@ -117,7 +117,7 @@ public class MainPageController implements NativeKeyListener
 
                 try
                 {
-                    Runtime.getRuntime().exec(EMULATOR_NAME + " -config");
+                    Runtime.getRuntime().exec("./" + EMULATOR_NAME);
                 }
                 catch (IOException e)
                 {
