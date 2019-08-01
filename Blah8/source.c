@@ -1,4 +1,4 @@
-﻿#ifdef _MSC_VER
+#ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
@@ -39,15 +39,13 @@ void splitKeycodes(int *keycodes, char *keyCodeString);
 Config readConfigFile();
 
 
-int main(int argc, char* args[]) 
+int main(void)
 {
 	Config config = readConfigFile();
 
 	initChip8();
 
 	loadGame(config.gamePath);
-
-	
 
 	//Start up SDL and create window
 	if (!initScreen(config))
@@ -168,14 +166,14 @@ Config readConfigFile()
 	FILE *fl = fopen("options.config", "r");
 	if (fl == NULL)
 	{
-		printf("Config file couldn't load");
+		printf("Config file couldn't be loaded");
 		exit(0);
 	}
 
 	char keyCodeString[64];
 	uint32_t objectColorString = 0, backgroundColorString = 0;
 
-	fscanf(fl, "%s %d %d %d %x %x %s", config.gamePath,
+	fscanf(fl, "%[^\n]%*c%d\n%d\n%d\n%x\n%x\n%s", config.gamePath,
 		   &(config.resWidth), &(config.resHeight), &(config.fullscreen),
 		   &objectColorString, &backgroundColorString,
 		   keyCodeString);

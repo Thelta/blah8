@@ -31,7 +31,7 @@ public class ConfigFileData
     private boolean configExist;
 
     private static String FILENAME = "options.config";
-    private static String CONFIG_FILE_DELIMITER = " ";
+    private static String CONFIG_FILE_DELIMITER = "\n";
 
     public ConfigFileData()
     {
@@ -44,7 +44,6 @@ public class ConfigFileData
         {
             configExist = true;
 
-
             try (Stream<String> stream = Files.lines(Paths.get(FILENAME)))
             {
                 arr =  stream.toArray(String[]::new);
@@ -54,16 +53,14 @@ public class ConfigFileData
                 e.printStackTrace();
             }
 
-            String[] options =  arr[0].split(CONFIG_FILE_DELIMITER);
-
-            this.gamePath = options[0];
-            this.resWidth = Integer.decode(options[1]);
-            this.resHeight = Integer.decode(options[2]);
-            this.fullScreen = Integer.decode(options[3]);
-            this.objectColor = options[4];
-            this.backgroundColor = options[5];
-            this.keyCodeString = options[6];
-            this.buttonValueString = arr[1];
+            this.gamePath = arr[0];
+            this.resWidth = Integer.decode(arr[1]);
+            this.resHeight = Integer.decode(arr[2]);
+            this.fullScreen = Integer.decode(arr[3]);
+            this.objectColor = arr[4];
+            this.backgroundColor = arr[5];
+            this.keyCodeString = arr[6];
+            this.buttonValueString = arr[7];
         }
     }
 
