@@ -1,5 +1,5 @@
 #pragma once
-#include "DataStruct.h"
+#include "datastruct.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
