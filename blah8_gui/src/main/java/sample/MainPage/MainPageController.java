@@ -2,6 +2,7 @@ package sample.MainPage;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -20,8 +21,7 @@ import sample.Resolution.ResolutionService;
 import java.io.File;
 import java.io.IOException;
 
-public class MainPageController implements NativeKeyListener
-{
+public class MainPageController implements NativeKeyListener {
 
     @FXML
     private App main;
@@ -59,8 +59,7 @@ public class MainPageController implements NativeKeyListener
 
     private static String EMULATOR_NAME = "blah8";
 
-    public void setMain(App main)
-    {
+    public void setMain(App main) {
         this.main = main;
     }
 
@@ -71,7 +70,7 @@ public class MainPageController implements NativeKeyListener
 
         //Init ConfigFileData and if there is a config.file set values to that.
         configFileData = new ConfigFileData();
-        if(configFileData.isConfigExist())
+        if (configFileData.isConfigExist())
         {
             configFileData.setDefaultValues(filePathField, resolutionBox, backgroundColorPicker,
                     objectColorPicker, fullscreenCheckBox, hexpadControls);
@@ -83,7 +82,7 @@ public class MainPageController implements NativeKeyListener
         resolutionBox.setItems(resolutions);
         resolutionBox.setValue(resolutions.get(resolutions.size() - 1));
 
-        ObservableList<HexpadButton> observableHexpadButtons= hexpadControls.getObservableHexpadButtons();
+        ObservableList<HexpadButton> observableHexpadButtons = hexpadControls.getObservableHexpadButtons();
         buttonSelector.setItems(observableHexpadButtons);
         buttonSelector.getSelectionModel().selectFirst();
         changeButtonChangerValue();
@@ -102,30 +101,38 @@ public class MainPageController implements NativeKeyListener
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("./"));
             fileChooser.setTitle("Select chip8 game file.");
-            File gameFile =  fileChooser.showOpenDialog(stage);
-            if(gameFile != null)
+            File gameFile = fileChooser.showOpenDialog(stage);
+            if (gameFile != null)
             {
                 filePathField.setText(gameFile.getAbsolutePath());
             }
         });
 
         runEmulatorButton.setOnAction(event -> {
-            if(validateFilePath(filePathField.getText()))
+            if (validateFilePath(filePathField.getText()))
             {
                 setConfigFileData();
                 configFileData.writeConfigFile();
-
-                try
+                Task<Void> task = new Task<Void>()
                 {
-                    Runtime.getRuntime().exec("./" + EMULATOR_NAME);
-                }
-                catch (IOException e)
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Can't Run Emulator.");
-                    alert.setContentText("Can't find emulator.Please put blah8 executable to same folder in ui executable.");
-                    alert.show();
-                }
+                    @Override
+                    public Void call() throws Exception
+                    {
+                        try
+                        {
+                            Process p = Runtime.getRuntime().exec("." + File.separator + EMULATOR_NAME);
+                            p.waitFor();
+                        }
+                        catch (IOException | InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                Thread thread = new Thread(task);
+                thread.setDaemon(true); // thread will not prevent application from exiting
+                thread.start();
             }
             else
             {
@@ -143,7 +150,6 @@ public class MainPageController implements NativeKeyListener
     {
         int buttonIndex = buttonSelector.getSelectionModel().getSelectedIndex();
         buttonChanger.setText(hexpadControls.getButtonValue(buttonIndex));
-
     }
 
     private boolean validateFilePath(String path)
@@ -151,7 +157,7 @@ public class MainPageController implements NativeKeyListener
         try
         {
             File file = new File(path);
-            if(file.exists() && !file.isDirectory())
+            if (file.exists() && !file.isDirectory())
             {
                 return true;
             }
@@ -188,20 +194,17 @@ public class MainPageController implements NativeKeyListener
         int buttonIndex = buttonSelector.getSelectionModel().getSelectedIndex();
         boolean isFailed;
         isFailed = hexpadControls.changeButton(buttonIndex,
-                                                nativeKeyEvent.getKeyCode(),
-                                                nativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()));
+                nativeKeyEvent.getKeyCode(),
+                nativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()));
         GlobalScreen.removeNativeKeyListener(this);
 
-        Platform.runLater(new Runnable()
-        {
+        Platform.runLater(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 buttonSelector.requestFocus();
                 changeButtonChangerValue();
 
-                if (!isFailed)
-                {
+                if (!isFailed) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("About Key Change");
                     alert.setContentText("That key is assigned to another button.");
