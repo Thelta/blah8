@@ -62,9 +62,10 @@ void initChip8()
 
 void emulateCycle()
 {
+	//fprintf(stderr, "pc: %d\n", pc);
 	opcode = memory[pc] << 8;
 	opcode = opcode | memory[pc + 1];
-	
+	//fprintf(stderr, "opcode: %x\n", opcode);
 	instructionIdentifier[(opcode & 0xf000) >> 12](opcode);
 
 	if (delayTimer > 0)
@@ -114,8 +115,14 @@ internal void somethingWrong(uint16_t opcode)
 
 internal void ii0(uint16_t opcode)
 {
-	uint16_t identifier = (opcode & 0x000f) / 14;	//there are only two instructions 00e0 and 00ee.by dividing 14 we end up with 0 and 1.
-	type0[identifier](opcode);
+	if (opcode != 0xee && opcode != 0xe0)
+	{
+		somethingWrong(opcode);
+	}
+	uint16_t identifier = (opcode & 0x000e);
+
+	//there are only two instructions 00e0 and 00ee.by dividing 14 we end up with 0 and 1.
+	type0[identifier / 14](opcode);
 }
 
 internal void ii00e0(uint16_t opcode)
