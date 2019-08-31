@@ -15,6 +15,7 @@ jobs:
       uses: airsquared/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-        javafx: true
     - name: Build with Maven
-      run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
+      run: apt-get install openjfx
+      mvn package --file blah8_gui/pom${{ matrix.java }}.xml
+            
