@@ -9,12 +9,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         java: [8, 10]
-        include:
-        # includes a new variable of npm with a value of 2 for the matrix leg matching the os and version
-        - os: ubuntu-latest
-          java: 8
-          steps:
-            run: apt-install install openjfx
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 1.8
