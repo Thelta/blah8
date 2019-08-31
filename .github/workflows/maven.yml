@@ -10,7 +10,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         java: [8, 10]
         include:
-          java: 8
+          -java: 8
           javafx: true
     steps:
     - uses: actions/checkout@v1
