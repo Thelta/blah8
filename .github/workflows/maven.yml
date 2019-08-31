@@ -4,14 +4,12 @@ on: [push]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        java: [8, 10]
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 10
-    - name: Build with Maven
-      run: mvn package --file blah8_gui/pom.xml
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+        run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
