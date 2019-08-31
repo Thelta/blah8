@@ -10,8 +10,8 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         java: [8, 10]
         include:
-          -java: 8
-          javafx: true
+          - java: 8
+            javafx: true
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 1.8
