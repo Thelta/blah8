@@ -16,7 +16,7 @@ jobs:
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
-        java-package: env[ ${{ matrix.java }}]
+        java-package: ${{env[${{ matrix.java }}]}}
         java-version: ${{ matrix.java }}
     - name: Build with Maven
       run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
