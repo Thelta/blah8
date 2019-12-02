@@ -28,7 +28,7 @@ jobs:
             vcpkg install sdl2
             mkdir build
             cd build
-            cmake ../Blah8/
+            cmake ../Blah8/ -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake
             cmake --build .
             
             
