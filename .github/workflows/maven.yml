@@ -16,14 +16,22 @@ jobs:
             java-pkg: "jdk"
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK 1.8
+    - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
         java-package: ${{ matrix.java-pkg }}
     - name: Build with Maven
-      run: | 
-            mvn package --file blah8_gui/pom${{ matrix.java }}.xml
+      run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
+    - name: Build with CMake
+      run: |
             vcpkg install sdl2
+            mkdir build && cd build && cmake ../Blah8/ -DCMAKE_TOOLCHAIN_FILE=${{ VCPKG_INSTALLATION_ROOT }}/scripts\buildsystems\vcpkg.cmake
+            cmake --build .
+            
+            
+
+            
+            
       
             
