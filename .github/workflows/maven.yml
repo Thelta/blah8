@@ -2,8 +2,6 @@ name: Java CI
 
 on: [push]
 
-env: { 8 : "jdk+fx", 10 : "jdk" }
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -11,12 +9,16 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         java: [ 8, 10 ]
+        include:
+          - java: 8
+            java-package: "jdk+8"
+          - java: 10
+            java-package: "jdk"
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
-        java-package: ${{env[${{ matrix.java }}]}}
         java-version: ${{ matrix.java }}
     - name: Build with Maven
       run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
