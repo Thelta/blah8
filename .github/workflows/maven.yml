@@ -26,7 +26,7 @@ jobs:
     - name: Build with CMake
       run: |
             vcpkg install sdl2
-            mkdir build && cd build && cmake ../Blah8/ -DCMAKE_TOOLCHAIN_FILE=${{ VCPKG_INSTALLATION_ROOT }}/scripts\buildsystems\vcpkg.cmake
+            mkdir build && cd build && cmake ../Blah8/
             cmake --build .
             
             
