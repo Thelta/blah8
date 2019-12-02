@@ -11,7 +11,7 @@ jobs:
         java: [ 8, 10 ]
         include:
           - java: 8
-            java-package: "jdk+8"
+            java-package: "jdk+fx"
           - java: 10
             java-package: "jdk"
     steps:
