@@ -28,8 +28,11 @@ jobs:
             vcpkg install sdl2
             mkdir build
             cd build
+            echo ----------------------PWD--------------------------------
             pwd
-            ls
+            echo ====================== THIS FOLDER ==========================
+            ls .
+            echo ********************** PREV FOLDER *********************
             ls ..
             cmake ../Blah8/ -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake
             cmake --build .
