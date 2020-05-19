@@ -14,6 +14,10 @@ jobs:
             java-pkg: "jdk+fx"
           - java: 10
             java-pkg: "jdk"
+          - os : "ubuntu-latest"
+            os-kernel: "linux"
+          - os: "windows-latest"
+            os-kernel: "windows"
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK
@@ -24,7 +28,7 @@ jobs:
     - name: Build with Maven
       run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
     - name: Build dependencies
-      run: vcpkg install sdl2:x64
+      run: vcpkg install sdl2:x64-${{ matrix.os-kernel }}
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure CMake
