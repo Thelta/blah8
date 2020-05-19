@@ -23,19 +23,18 @@ jobs:
         java-package: ${{ matrix.java-pkg }}
     - name: Build with Maven
       run: mvn package --file blah8_gui/pom${{ matrix.java }}.xml
-    - name: Build with CMake
-      run: |
-            vcpkg install sdl2
-            mkdir build
-            cd build
-            echo ----------------------PWD--------------------------------
-            pwd
-            echo ====================== THIS FOLDER ==========================
-            ls .
-            echo ********************** PREV FOLDER *********************
-            ls ..
-            cmake ../Blah8/ -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake
-            cmake --build .
-            
+    - name: Build dependencies
+      run: vcpkg install sdl2
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE/Blah8 -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: cmake --build .
       
             
